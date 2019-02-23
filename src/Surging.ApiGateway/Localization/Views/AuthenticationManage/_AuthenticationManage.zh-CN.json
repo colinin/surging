@@ -1,0 +1,8 @@
+{
+    "Localization":{
+        "IdentityManager":"认证管理",
+        "IdentityAuthentization":"身份认证",
+        "ServiceToken":"服务令牌",
+        "BlackAndWhite":"黑白名单"
+    }
+}

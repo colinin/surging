@@ -1,0 +1,17 @@
+{
+    "Localization":{
+        "IdentityManager":"认证管理",
+        "ServiceToken":"服务令牌",
+        "MachineNameOrServiceId":"机器名\\服务Id",
+        "Search":"搜  索",
+        "KeyWord":"关键字",
+        "MachineName":"机器名",
+        "Status":"状态",
+        "Check":"检查",
+        "Token":"令牌",
+        "Operation":"操作",
+        "EditServiceToken":"服务器令牌编辑",
+        "Submitting":"提交中...",
+        "Submit":"提交"
+    }
+}

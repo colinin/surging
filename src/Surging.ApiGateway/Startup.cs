@@ -27,6 +27,13 @@ using ApiGateWayConfig = Surging.Core.ApiGateWay.AppConfig;
 using Surging.Core.Caching;
 using Surging.Core.CPlatform.Cache;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
+using Surging.Core.Localization.Json;
+using System.Globalization;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Localization;
 
 namespace Surging.ApiGateway
 {
@@ -55,9 +62,19 @@ namespace Surging.ApiGateway
         private IServiceProvider RegisterAutofac(IServiceCollection services)
         {
             var registerConfig = ApiGateWayConfig.Register;
+
+            // Localization
+            services.AddJsonLocalization(options =>
+            {
+                options.ResourcesPath = "Localization";
+            });
+
             services.AddMvc(options => {
                 options.Filters.Add(typeof(CustomExceptionFilterAttribute));
-            }).AddJsonOptions(options => {
+            })
+            .AddMvcLocalization()
+            .AddViewLocalization()
+            .AddJsonOptions(options => {
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
@@ -118,8 +135,23 @@ namespace Surging.ApiGateway
             });
             var myProvider = new FileExtensionContentTypeProvider();
             myProvider.Mappings.Add(".tpl", "text/plain");
-            app.UseStaticFiles(new StaticFileOptions() { ContentTypeProvider = myProvider });
+            app.UseStaticFiles(new StaticFileOptions() { ContentTypeProvider = myProvider });   
             app.UseStaticFiles();
+
+            // Localization
+            IList<CultureInfo> supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("zh-CN"),
+            };
+
+            app.UseRequestLocalization(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("zh-CN");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

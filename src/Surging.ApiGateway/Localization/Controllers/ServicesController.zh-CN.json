@@ -1,0 +1,6 @@
+{
+    "Localization":{
+        "RequestError":"请求错误",
+        "AuthorizationFailed":"无效的身份验证凭证"
+    }
+}

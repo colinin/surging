@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Surging.Core.ApiGateWay;
 using Surging.Core.ApiGateWay.OAuth;
 using Surging.Core.CPlatform;
 using Surging.Core.CPlatform.Filters.Implementation;
 using Surging.Core.CPlatform.Routing;
+using Surging.Core.CPlatform.Transport.Implementation;
 using Surging.Core.ProxyGenerator;
-using Surging.Core.ProxyGenerator.Utilitys;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 using GateWayAppConfig = Surging.Core.ApiGateWay.AppConfig;
-using System.Reflection;
-using Surging.Core.CPlatform.Utilities;
-using Newtonsoft.Json.Linq;
-using Surging.Core.CPlatform.Transport.Implementation;
 
 namespace Surging.ApiGateway.Controllers
 {
@@ -25,15 +23,17 @@ namespace Surging.ApiGateway.Controllers
         private readonly IServiceProxyProvider _serviceProxyProvider;
         private readonly IServiceRouteProvider _serviceRouteProvider;
         private readonly IAuthorizationServerProvider _authorizationServerProvider;
-
+        private readonly IStringLocalizer<ServicesController> _servicesLocalizer;
      
         public ServicesController(IServiceProxyProvider serviceProxyProvider, 
             IServiceRouteProvider serviceRouteProvider,
-            IAuthorizationServerProvider authorizationServerProvider)
+            IAuthorizationServerProvider authorizationServerProvider,
+            IStringLocalizer<ServicesController> servicesLocalizer)
         {
             _serviceProxyProvider = serviceProxyProvider;
             _serviceRouteProvider = serviceRouteProvider;
             _authorizationServerProvider = authorizationServerProvider;
+            _servicesLocalizer = servicesLocalizer;
         }
        
         public async Task<ServiceResult<object>> Path([FromServices]IServicePartProvider servicePartProvider, string path, [FromBody]Dictionary<string, object> model)
@@ -51,7 +51,7 @@ namespace Surging.ApiGateway.Controllers
             ServiceResult<object> result = ServiceResult<object>.Create(false,null);
             path = String.Compare(path,GateWayAppConfig.TokenEndpointPath,true) ==0 ? 
                 GateWayAppConfig.AuthorizationRoutePath : path.ToLower();
-            if( await GetAllowRequest(path)==false) return new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = "Request error" };
+            if( await GetAllowRequest(path)==false) return new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = _servicesLocalizer["RequestError"] };
             if (servicePartProvider.IsPart(path))
             {
                 result = ServiceResult<object>.Create(true, await servicePartProvider.Merge(path, model));
@@ -70,7 +70,7 @@ namespace Surging.ApiGateway.Controllers
                     }
                     else
                     {
-                        result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = "Invalid authentication credentials" };
+                        result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = _servicesLocalizer["AuthorizationFailed"] };
                     }
                 }
                 else
@@ -125,7 +125,7 @@ namespace Surging.ApiGateway.Controllers
                 isSuccess = _authorizationServerProvider.ValidateClientAuthentication(author).Result;
                 if (!isSuccess)
                 {
-                    result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = "Invalid authentication credentials" };
+                    result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = _servicesLocalizer["AuthorizationFailed"] };
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace Surging.ApiGateway.Controllers
             }
             else
             {
-                result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = "Request error" };
+                result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = _servicesLocalizer["RequestError"] };
                 isSuccess = false;
             }
             return isSuccess;
@@ -164,25 +164,25 @@ namespace Surging.ApiGateway.Controllers
                         {
                             if (GetMD5($"{route.ServiceDescriptor.Token}{time.ToString("yyyy-MM-dd hh:mm:ss") }") != author.ToString())
                             {
-                                result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = "Invalid authentication credentials" };
+                                result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = _servicesLocalizer["AuthorizationFailed"] };
                                 isSuccess = false;
                             }
                         }
                         else
                         {
-                            result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = "Invalid authentication credentials" };
+                            result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = _servicesLocalizer["AuthorizationFailed"] };
                             isSuccess = false;
                         }
                     }
                     else
                     {
-                        result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = "Invalid authentication credentials" };
+                        result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.AuthorizationFailed, Message = _servicesLocalizer["AuthorizationFailed"] };
                         isSuccess = false;
                     }
                 }
                 else
                 {
-                    result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = "Request error" };
+                    result = new ServiceResult<object> { IsSucceed = false, StatusCode = (int)ServiceStatusCode.RequestError, Message = _servicesLocalizer["RequestError"] };
                     isSuccess = false;
                 } 
             return isSuccess;

@@ -1,0 +1,6 @@
+{
+    "Localization":{
+        "RequestError":"Request error",
+        "AuthorizationFailed":"Invalid authentication credentials"
+    }
+}

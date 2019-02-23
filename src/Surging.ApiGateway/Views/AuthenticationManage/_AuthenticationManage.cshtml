@@ -1,5 +1,7 @@
-﻿@{
-    ViewBag.Title = "认证管理";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title =  Localizer["IdentityManager"];
     Layout = "~/Views/Shared/_AppLayout.cshtml";
 }
 @section SubHeadCSS
@@ -8,13 +10,13 @@
 }
 <div class="app-frame app-board">
     <div class="app-left-side  menu-min">
-        <h4 class="app-title"><i class="surging-icon-line"></i> <span>身份认证</span></h4>
+        <h4 class="app-title"><i class="surging-icon-line"></i> <span>@Localizer["IdentityAuthentization"]</span></h4>
         <div style="position:relative;min-height:466px;" class="scrollbar">
             <div class="content">
                 <nav class="app-left-nav">
                     <ul>
-                        <li><a href="@Url.Action("Index",new { XPJAX=true})" title="服务令牌" class="board-group popup active" data-pjax=".page-content"><i class="surging-icon-token"></i><span class="nav-level-span">服务令牌</span></a></li>
-                        <li><a href="javascript:void(0)" class="board-group" title="黑白名单"><i class="surging-icon-blacklist"></i><span class="nav-level-span">黑白名单</span></a></li>
+                        <li><a href="@Url.Action("Index",new { XPJAX=true})" title="@Localizer["ServiceToken"]" class="board-group popup active" data-pjax=".page-content"><i class="surging-icon-token"></i><span class="nav-level-span">@Localizer["ServiceToken"]</span></a></li>
+                        <li><a href="javascript:void(0)" class="board-group" title="@Localizer["BlackAndWhite"]"><i class="surging-icon-blacklist"></i><span class="nav-level-span">@Localizer["BlackAndWhite"]</span></a></li>
                     </ul>
                 </nav>
             </div>
@@ -41,7 +43,7 @@
 @section SubFootJS
     {
     <script type="text/javascript">
-        seajs.use("apps_authmanage/modules/authenticationmanage.js", function(a) {
+        seajs.use("apps_authmanage/modules/authenticationmanage.js", function (a) {
             a.init({
             });
         });

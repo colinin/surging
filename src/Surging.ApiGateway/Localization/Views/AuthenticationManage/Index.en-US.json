@@ -1,0 +1,17 @@
+{
+    "Localization":{
+        "IdentityManager":"Identity manager",
+        "ServiceToken":"Service token",
+        "MachineNameOrServiceId":"Machine name & service id",
+        "Search":"Search",
+        "KeyWord":"Keyword",
+        "MachineName":"Machine name",
+        "Status":"Status",
+        "Check":"Check",
+        "Token":"Token",
+        "Operation":"Operation",
+        "EditServiceToken":"Edit service token",
+        "Submitting":"Submitting...",
+        "Submit":"Submit"
+    }
+}

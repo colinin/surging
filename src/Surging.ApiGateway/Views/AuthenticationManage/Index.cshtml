@@ -1,16 +1,17 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewBag.Title = "认证管理";
+    ViewBag.Title = Localizer["IdentityManager"];
     var isPjax = (!string.IsNullOrEmpty(Context.Request.Query["XPJAX"]) && bool.Parse(Context.Request.Query["XPJAX"]))
-              && (!string.IsNullOrEmpty(Context.Request.Headers["X-PJAX"]) && bool.Parse(Context.Request.Headers["X-PJAX"]));
+      && (!string.IsNullOrEmpty(Context.Request.Headers["X-PJAX"]) && bool.Parse(Context.Request.Headers["X-PJAX"]));
     Layout = isPjax ? null : "_AuthenticationManage.cshtml";
 }
 <div class="page-header">
     <h1>
-       认证管理
+        @Localizer["IdentityManager"]
         <small>
             <i class="icon-double-angle-right"></i>
-            服务令牌
+            @Localizer["ServiceToken"]
         </small>
     </h1>
     <div class="ace-settings-container">
@@ -24,8 +25,8 @@
         <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
             <div class="row">
                 <div class="col-sm-6">
-                    关键字：<input type="text" name="queryParam" id="queryParam" placeholder="机器名\服务Id">
-                    <button id="btnSearch" class="btn btn-primary">搜&#12288;索</button>
+                    @Localizer["KeyWord"]：<input type="text" name="queryParam" id="queryParam" placeholder="@Localizer["MachineNameOrServiceId"]">
+                    <button id="btnSearch" class="btn btn-primary">@Localizer["Search"]</button>
                 </div>
             </div>
             <div>
@@ -33,11 +34,11 @@
                     <thead>
                         <tr role="row">
                             <th style="width: 6%"></th>
-                            <th class="center" width="12%">机器名</th>
-                            <th class="center" width="12%">状态</th>
-                            <th class="center" width="12%">检查</th>
-                            <th class="center" width="12%">令牌</th> 
-                            <th class="center">操作</th>
+                            <th class="center" width="12%">@Localizer["MachineName"]</th>
+                            <th class="center" width="12%">@Localizer["Status"]</th>
+                            <th class="center" width="12%">@Localizer["Check"]</th>
+                            <th class="center" width="12%">@Localizer["Token"]</th>
+                            <th class="center">@Localizer["Operation"]</th>
                         </tr>
                     </thead>
                     <tbody id=""></tbody>
@@ -53,12 +54,12 @@
             <form id="eventForm" action="" name="eventForm" method="post" class="form-horizontal">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">服务令牌编辑</h4>
+                    <h4 class="modal-title">@Localizer["EditServiceToken"]</h4>
                 </div>
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="submitEvent" data-loading-text='<i class="icon-spinner icon-spin bigger-110"></i>提交中...' autocomplete="off">提交</button>
+                    <button type="submit" class="btn btn-primary" id="submitEvent" data-loading-text='<i class="icon-spinner icon-spin bigger-110"></i>@Localizer["Submitting"]' autocomplete="off">@Localizer["Submit"]</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </form>
@@ -70,10 +71,10 @@
     @section SubFootJS
         {
         <script type="text/javascript">
-            seajs.use("apps_authmanage/view/address.guide.js", function(a) {
-            a.init({
+            seajs.use("apps_authmanage/view/address.guide.js", function (a) {
+                a.init({
+                });
             });
-        });
         </script>
     }
 }
