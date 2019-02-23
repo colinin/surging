@@ -26,7 +26,7 @@ namespace Surging.Core.Localization.Json
             _options = options;
             _hostingEnvironment = hostingEnvironment;
             _cultureInfo = culture ?? CultureInfo.CurrentCulture;
-            _baseResourceName = baseResourceName + "." + _cultureInfo.Name;
+            _baseResourceName = baseResourceName;
             _localizerConfiguration = InitializeLocalizeJson();
         }
 
@@ -59,9 +59,7 @@ namespace Surging.Core.Localization.Json
 
         private IConfiguration InitializeLocalizeJson()
         {
-            var jsonPath = _options.ResourcesPath + "/" +  _baseResourceName;
-            //System.Console.WriteLine(string.Join(Environment.NewLine, Directory.GetFiles(_options.ResourcesPath, "*.json", SearchOption.AllDirectories)));
-            var jsonFile = jsonPath + ".json";
+            var jsonFile = _options.ResourcesPath + "/" + "." + _cultureInfo.Name +  _baseResourceName + ".json";
             if (File.Exists(jsonFile))
             {
                 return new ConfigurationBuilder()
