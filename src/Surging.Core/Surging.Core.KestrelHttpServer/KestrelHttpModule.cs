@@ -31,11 +31,14 @@ namespace Surging.Core.KestrelHttpServer
             base.RegisterBuilder(builder);
             var section = CPlatform.AppConfig.GetSection("Swagger");
             if (section.Exists())
+            {
                 AppConfig.SwaggerOptions = section.Get<Info>();
+                AppConfig.SwaggerConfig = section.Get<DocumentConfiguration>();
+            }
             builder.RegisterType(typeof(DefaultServiceSchemaProvider)).As(typeof(IServiceSchemaProvider)).SingleInstance();
 
             builder.RegisterType(typeof(HttpExecutor)).As(typeof(IServiceExecutor))
-  .Named<IServiceExecutor>(CommunicationProtocol.Http.ToString()).SingleInstance();
+                .Named<IServiceExecutor>(CommunicationProtocol.Http.ToString()).SingleInstance();
             if (CPlatform.AppConfig.ServerOptions.Protocol == CommunicationProtocol.Http)
             {
                 RegisterDefaultProtocol(builder);
@@ -54,7 +57,8 @@ namespace Surging.Core.KestrelHttpServer
                     provider.Resolve<ILogger<KestrelHttpMessageListener>>(),
                     provider.Resolve<ISerializer<string>>(),
                     provider.Resolve<IServiceSchemaProvider>(),
-                     provider.Resolve<IServiceEngineLifetime>()
+                     provider.Resolve<IServiceEngineLifetime>(),
+                     provider.Resolve<IServiceEntryProvider>()
                       );
             }).SingleInstance();
             builder.Register(provider =>
@@ -78,7 +82,8 @@ namespace Surging.Core.KestrelHttpServer
                     provider.Resolve<ILogger<KestrelHttpMessageListener>>(),
                     provider.Resolve<ISerializer<string>>(),
                     provider.Resolve<IServiceSchemaProvider>(), 
-                     provider.Resolve<IServiceEngineLifetime>()
+                     provider.Resolve<IServiceEngineLifetime>(),
+                    provider.Resolve<IServiceEntryProvider>()
                       );
             }).SingleInstance();
             builder.Register(provider =>

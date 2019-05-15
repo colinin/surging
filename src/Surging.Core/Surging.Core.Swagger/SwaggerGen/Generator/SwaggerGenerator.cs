@@ -55,7 +55,12 @@ namespace Surging.Core.SwaggerGen
             if (!_options.SwaggerDocs.TryGetValue(documentName, out Info info))
                 throw new UnknownSwaggerDocument(documentName);
 
+
+
             var entry = _serviceEntryProvider.GetALLEntries();
+
+             entry = entry
+       .Where(apiDesc => _options.DocInclusionPredicateV2(documentName, apiDesc));
 
             var schemaRegistry = _schemaRegistryFactory.Create();
 
@@ -186,6 +191,7 @@ namespace Surging.Core.SwaggerGen
 
             var operation = new Operation
             {
+                Tags = new[] { serviceEntry.Type.Name },
                 OperationId = serviceEntry.Descriptor.Id, 
                 Parameters= CreateParameters(serviceEntry, methodInfo,schemaRegistry),
                 Deprecated = isDeprecated ? true : (bool?)null,

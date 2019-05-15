@@ -13,8 +13,9 @@
     "DisconnTimeInterval": 30,
     "ExecutionTimeoutInMilliseconds": 1000,
     "Protocol": "${Protocol}|None", //Http、Tcp、None
-    "RootPath": "${RootPath}|D:\\userapp",
+    "RootPath": "${RootPath}|D:\\userapp1",
     "WebRootPath": "${WebRootPath}|D:\\UserApp\\wwwroot",
+    "IsModulePerLifetimeScope": false,
     "ReloadOnChange": false,
     "Ports": {
       "HttpPort": "${HttpPort}|280",
@@ -30,24 +31,30 @@
     ]
   }, //如果引用多个同类型的组件，需要配置Packages，如果是自定义按需引用，无需配置Packages
   "Consul": {
-    "ConnectionString": "${Register_Conn}|127.0.0.1:8500", // "127.0.0.1:8500",
+    "ConnectionString": "${Register_Conn}|127.0.0.1:8500", // "127.0.0.1:8500,127.0.0.1:9500",
     "SessionTimeout": "${Register_SessionTimeout}|50",
     "RoutePath": "${Register_RoutePath}",
     "ReloadOnChange": true,
     "EnableChildrenMonitor": false
   },
   "Swagger": {
-    "Version": "${SwaggerVersion}|V1", // "127.0.0.1:8500",
-    "Title": "${SwaggerTitle}|Surging Demo",
-    "Description": "${SwaggerDes}|surging demo",
-    "Contact": {
-      "Name": "API Support",
-      "Url": "https://github.com/dotnetcore/surging",
-      "Email": "fanliang1@hotmail.com"
+    "Info": {
+      "Version": "${SwaggerVersion}|V1", // "127.0.0.1:8500",
+      "Title": "${SwaggerTitle}|Surging Demo",
+      "Description": "${SwaggerDes}|surging demo",
+      "Contact": {
+        "Name": "API Support",
+        "Url": "https://github.com/dotnetcore/surging",
+        "Email": "fanliang1@hotmail.com"
+      },
+      "License": {
+        "Name": "MIT",
+        "Url": "https://github.com/dotnetcore/surging/blob/master/LICENSE"
+      }
     },
-    "License": {
-      "Name": "MIT",
-      "Url": "https://github.com/dotnetcore/surging/blob/master/LICENSE"
+    "Options": {
+      "IgnoreFullyQualified": false
+      // "IngressName": "Notice"
     }
   },
   "EventBus_Kafka": {
@@ -80,7 +87,7 @@
     "Port": "${EventBusPort}|5672"
   },
   "Zookeeper": {
-    "ConnectionString": "${Zookeeper_ConnectionString}|127.0.0.1:2181",
+    "ConnectionString": "${Zookeeper_ConnectionString}|127.0.0.1:2181", // "127.0.0.1:2181,127.0.0.1:2281",
     "SessionTimeout": 50,
     "ReloadOnChange": true
   },
